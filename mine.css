@@ -1,0 +1,98 @@
+.intro
+{
+  padding-top: 90px; 
+  text-align: center; 
+  height: 140px; 
+  background-color: #049CD9; 
+  background-image: url(img/grid-18px-masked.png);
+}
+
+.intro h1
+{
+  color: #FFFFFF;
+}
+
+.intro h3
+{
+  color: #FFFFFF;
+}
+
+.game 
+{
+	height: 400px;
+	padding-top: 30px;
+	background-color: #000000; 
+	background-image: url(img/grid-18px-masked.png);
+}
+
+.right
+{
+  float: right;
+}
+
+.divisor
+{
+  background-color: gray;
+  margin: 20px;
+}
+
+.lined
+{
+  display: inline;
+  margin: 3px;
+}
+
+.offset3
+{
+  position: relative;
+  top: -3px;
+}
+
+.lightlabel
+{
+  padding: 2px 4px 3px;
+  position: relative;
+  top: 2px;
+}
+
+.gridDiv
+{
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin: 1px;
+  background: white;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+
+.gridRow
+{
+  display: block;
+}
+
+.left
+{
+  text-align: left;
+}
+
+.center
+{
+  text-align: center;
+}
+
+.right
+{
+  text-align: right;
+}
+
+.controls
+{
+  color: #AAA;
+}
+
+#nojs
+{
+  color: #F00;
+}
