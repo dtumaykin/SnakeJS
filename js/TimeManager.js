@@ -1,12 +1,9 @@
 /*
  * TimeManager.js
  * 
- * Handles time. Ticks each n ms, calling a callback function.
+ * Handles time. Ticks each n ms, calling a callback functions.
  * Can be pause or resetted.
  */
-
-// TODO:
-// Add args support for callbacks
 
  // Creates timer that ticks every `interval`. If `start` is true, timer starts automatically.
  // Array of callbacks functions `funcs` can be passed(as array of functions or as array of objects).
@@ -30,6 +27,8 @@
 
  	if(start == true)
  		this.Start();
+
+ 	return this;
  }
 
 
@@ -46,10 +45,24 @@
  	}
 
  	// call the callbacks
- 	for(var fn in this.callbacks)
+ 	for(var idx in this.callbacks)
  	{
- 		fn();
- 		// TODO: parse callbacks array and call functions with passed args
+ 		var callback = this.callbacks[idx]; // get current callback
+ 		switch (typeof callback)
+ 		{
+ 			case 'function': // if a function, call it
+ 				callback.call();
+ 				break;
+ 			case 'object': // if an object, parse arguments, and envoke func with the arguments
+ 				var args = new Array();
+
+ 				for(var argIdx in callback.args)
+ 					args.push(callback.args[argIdx]);
+
+ 				callback.func.apply(null, args); // envoke functions with right arguments
+ 				break;
+
+ 		}
  	}
  }
 
@@ -66,7 +79,7 @@
  // }
  TimeManager.prototype.AddCallback = function(fn)
  {
- 	this.callback.append(fn);
+ 	this.callbacks.push(fn);
  }
  
  // Starts the timer
@@ -75,7 +88,9 @@
  	if(!this.running)
  	{
  		this.running = true;
- 		this.t = setInterval(this.interval, this.Tick);
+ 		this.t = setInterval(function(){ // set envoking interval
+ 			this.Tick.call(this)
+ 		}.bind(this), this.interval);
  	}
  }
 
@@ -93,5 +108,39 @@
  TimeManager.prototype.Wait = function(pauseTime)
  {
  	this.Stop();
- 	this.t = setTimeout(pauseTime, this.Start);
+ 	this.t = setTimeout(pauseTime || 1000, this.Start);
+ }
+
+ TimeManager.prototype.Pause = TimeManager.prototype.Wait;
+
+ TimeManager.prototype.Reset = function()
+ {
+ 	this.Stop();
+ 	this.m = 0;
+ 	this.s = 0;
+ }
+
+ TimeManager.prototype.GetSeconds = function()
+ {
+ 	return this.s;
+ }
+
+ TimeManager.prototype.GetMinutes = function()
+ {
+ 	return this.m;
+ }
+
+ // Returns time string with mm:ss format
+ TimeManager.prototype.GetTime = function()
+ {
+ 	var seconds = this.s,
+ 		minutes = this.m;
+
+ 		if(seconds < 10)
+ 			seconds = '0' + seconds;
+
+ 		if(minutes < 10)
+ 			minutes = '0' + minutes;
+
+ 		return minutes + ':' + seconds;
  }
