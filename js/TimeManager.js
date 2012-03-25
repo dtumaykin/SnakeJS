@@ -10,7 +10,7 @@
  // 
  // Objects should have the following format:
  // var callback = {
- // 		func: function()
+ // 		func: function(),
  // 		args: {
  // 			arg1: value,
  // 			arg2: value
@@ -64,6 +64,14 @@
 
  		}
  	}
+
+ 	// re-set timeout
+ 	if(this.running)
+ 	{
+	 	this.t = setTimeout(function(){ // set envoking interval
+	 		this.Tick.call(this)
+	 	}.bind(this), this.interval);
+	}
  }
 
  // Adds new callback function
@@ -88,7 +96,7 @@
  	if(!this.running)
  	{
  		this.running = true;
- 		this.t = setInterval(function(){ // set envoking interval
+ 		this.t = setTimeout(function(){ // set envoking interval
  			this.Tick.call(this)
  		}.bind(this), this.interval);
  	}
@@ -100,11 +108,11 @@
  	if(this.running)
  	{
  		this.running = false;
- 		clearInterval(this.t);
+ 		clearTimeout(this.t);
  	}
  }
 
- //Stops the time, waits for puaseTime and Starts the timer
+ //Stops the time, waits for pauseTime and Starts the timer
  TimeManager.prototype.Wait = function(pauseTime)
  {
  	this.Stop();
@@ -143,4 +151,17 @@
  			minutes = '0' + minutes;
 
  		return minutes + ':' + seconds;
+ }
+
+ // Changes running interval
+ TimeManager.prototype.ChangeInterval = function(newInterval){
+ 	this.interval = newInterval;
+ }
+
+ TimeManager.prototype.Faster = function(){
+ 	this.ChangeInterval(this.interval - 100 || 100);
+ }
+
+ TimeManager.prototype.Slower = function(){
+ 	this.ChangeInterval(this.interval + 100);
  }
