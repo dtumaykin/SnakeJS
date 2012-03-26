@@ -20,8 +20,7 @@ var Snake = {
 		this.points = 0;
 		this.paused = false;
 
-		this.config.points.text('0');
-		this.config.currentDifficultySpan.text('1');
+		this.CleanUp();
 
 		// game field
 		this.map = {
@@ -98,7 +97,7 @@ var Snake = {
 
 		// bind + and - events
 		this.config.time.plusButton.on('click', function() {
-			diffSpan.text((self.diffLvl < 9) // limit max level to 9
+			diffSpan.text((self.diffLvl < 20) // limit max level to 20
 				? ++self.diffLvl
 				: self.diffLvl);
 
@@ -208,7 +207,8 @@ var Snake = {
 
 		// handle difficulty changes
 		$(Snake).bind("diffChanged", function(){
-			self.tmTick.ChangeInterval(1100 - self.diffLvl*100);
+			var newInterval = (self.diffLvl < 10) ? self.diffLvl * 100 : 900 + self.diffLvl*5;
+			self.tmTick.ChangeInterval(1100 - newInterval);
 		});
 
 		// move snake each tick
@@ -366,6 +366,19 @@ var Snake = {
 		$('button.restartButton').delay(1000).slideToggle().on('click', function(){
 			Snake.init(config);
 		});
+
+	},
+
+	CleanUp: function() {
+
+		this.config.points.text('0');
+		this.config.currentDifficultySpan.text('1');
+
+		$(Snake).unbind("incDiff");
+		$(Snake).unbind("diffChanged");
+
+		this.config.time.plusButton.unbind("click");
+		this.config.time.minusButton.unbind("click");
 
 	},
 
